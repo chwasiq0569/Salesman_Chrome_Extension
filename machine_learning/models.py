@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def sentiment_model(review):
-    MODEL = f"cardiffnlp/twitter-roberta-base-sentiment"
+    MODEL = os.environ['SENTIMENT_ANALYSIS_MODEL']
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL)
 
@@ -25,7 +25,7 @@ def sentiment_model(review):
     # return {key: float(val) for key, val in probabilities.items()}
 
 def get_gemini_response(input, text, prompt):
-  genai.configure(api_key='AIzaSyB6SSxm0cJ7miuafO7W0_YXJs6mzZjzW08')
+  genai.configure(api_key=os.environ['GEMINI_API_KEY'])
   model = genai.GenerativeModel('gemini-pro')
   response = model.generate_content([input, text, prompt])
   return response.text
