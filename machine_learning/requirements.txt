@@ -1,0 +1,9 @@
+bs4
+selenium
+fake-useragent
+python-dotenv
+fastapi
+scipy
+transformers
+google_generativeai
+uvicorn
