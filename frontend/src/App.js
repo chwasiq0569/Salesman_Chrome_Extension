@@ -1,5 +1,4 @@
 /* global chrome */
-
 import React from 'react';
 import './App.css';
 import ScrapeLoader from "./assets/waiting.gif"
@@ -7,21 +6,8 @@ import SiteLogo from "./assets/logo.PNG"
 import PuffLoader from "react-spinners/PuffLoader";
 import { PieChart } from 'react-minimal-pie-chart';
 
-export const data = [
-  ["Task", "Hours per Day"],
-  ["Work", 11],
-  ["Eat", 2],
-  ["Commute", 2],
-  ["Watch TV", 2],
-  ["Sleep", 7],
-];
-
-export const options = {
-  title: "My Daily Activities",
-};
 function App() {
   const [currentUrl, setCurrentUrl] = React.useState('');
-  const [isPopupVisible, setIsPopupVisible] = React.useState(false);
   const [userInput, setUserInput] = React.useState("");
   const [loading, setLoading] = React.useState(0)
   const [websiteContent, setWebsiteContent] = React.useState("");
@@ -32,37 +18,12 @@ function App() {
   const [negative_reviews, setNegativeReviews] = React.useState([]);
   const [neutral_reviews, setNeutralReviews] = React.useState([]);
   const [reviews_loading, setReviewsLoading] = React.useState(true)
-  const data = {
-    labels: ['Label 1', 'Label 2', 'Label 3'],
-    datasets: [
-      {
-        data: [30, 50, 20], // Replace these values with your data
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      },
-    ],
-  };
 
   var pos_values = [];
   var neu_values = [];
   var neg_values = [];
   const format_reviews = (originalArray) => {
     console.log('originalArray', originalArray)
-    // let originalArray = [
-    //   { "roberta_pos": 0.9061921238899231 },
-    //   { "roberta_pos": 0.9346755146980286 },
-    //   { "roberta_pos": 0.9674727320671082 },
-    //   { "roberta_pos": 0.8811066150665283 },
-    //   { "roberta_pos": 0.8969321250915527 },
-    //   { "roberta_pos": 0.9800454378128052 },
-    //   { "roberta_neu": 0.8581807017326355 },
-    //   { "roberta_neu": 0.6071822047233582 },
-    //   { "roberta_neu": 0.7544722557067871 },
-    //   { "roberta_pos": 0.8340927958488464 },
-    //   { "roberta_neu": 0.7440604567527771 }
-    // ];
-
-
     originalArray.forEach(item => {
       for (let key in item) {
         if (key === "roberta_pos") {
@@ -85,24 +46,15 @@ function App() {
     setReviewsLoading(false)
   }
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
-
   const [conversationArray, setConversationArray] = React.useState([
     {
       "Bot": "Hi How can I help you?"
     }
   ]);
 
-  const fetchApi = () => {
-    fetch('http://localhost:8000/').then(res => res.json()).then(data => console.log("DATA", data))
-  }
-
   const scrapeSite = (link) => {
     setLoading(1)
-    fetch('http://localhost:8000/scrape_site', {
+    fetch(process.env.SCRAPE_SITE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -123,7 +75,7 @@ function App() {
 
   const findAnswer = (websiteContent, question) => {
     setLoading(3)
-    fetch('http://localhost:8000/process_data', {
+    fetch(process.env.GET_ANSWER, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -145,7 +97,7 @@ function App() {
 
   const sentimentAnalysis = (context) => {
     setLoading(2)
-    fetch('http://localhost:8000/sentiment-analysis', {
+    fetch(process.env.GET_SENTIMENT_ANALYSIS, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -171,17 +123,6 @@ function App() {
         scrapeSite(tabs[0].url)
       }
     });
-
-    // chrome.action.onClicked.addListener(() => {
-    //   chrome.runtime.sendMessage({ action: "togglePopup" });
-    // });
-
-    // chrome.runtime.onMessage.addListener((message) => {
-    //   if (message.action === "togglePopup") {
-    //     setIsPopupVisible(!isPopupVisible);
-    //   }
-    // });
-    // fetchApi()
   }, []);
 
   return (
@@ -221,7 +162,7 @@ function App() {
               data={[
                 { title: 'Positive', value: positive_reviews.length, color: '#FFFFFF' },
                 { title: 'Negative', value: negative_reviews.length, color: '#000000' },
-                { title: 'Neutral', value: positive_reviews.length, color: '#FFFF00' },
+                { title: 'Neutral', value: neutral_reviews.length, color: '#FFFF00' },
               ]}
               label={({ dataEntry }) => dataEntry.title}
               labelStyle={{
