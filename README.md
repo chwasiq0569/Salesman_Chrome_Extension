@@ -1,6 +1,6 @@
 # Salesman Chrome Extension
 
-Salesman is a Chrome Extension designed to enhance your e-commerce browsing experience by providing virtual sales assistance. It leverages Gemini API for user query responses and employs Roberta-base for sentiment analysis on product reviews.
+![Salesman Logo](https://ibb.co/gm3fv7B) Salesman is a Chrome Extension designed to enhance your e-commerce browsing experience by providing virtual sales assistance. It leverages Gemini API for user query responses and employs Roberta-base for sentiment analysis on product reviews.
 
 ## Features
 - Virtual salesperson assistance on e-commerce product pages.
